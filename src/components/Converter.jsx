@@ -10,6 +10,7 @@ const Converter = ({ setCourse }) => {
   const [toCurrency, setToCurrency] = useState('UAH');
   const [fromValue, setFromValue] = useState(1);
   const [toValue, setToValue] = useState(null);
+  const [isToggle, setToggle] = useState(false);
 
   const fetchCurrency = async (currency) => {
     const response = await axios.get(
@@ -22,52 +23,56 @@ const Converter = ({ setCourse }) => {
     });
   };
 
-  useEffect(() => {
-    fetchCurrency(fromCurrency);
-  }, [fromCurrency]);
-
-  useEffect(() => {
-    if (Object.keys(exchangeRate.course).length) changeFromValue(fromValue);
-
-    setCourse({
-      fromCur: fromCurrency,
-      toCur: exchangeRate.course[toCurrency].code,
-      toValue: exchangeRate.course[toCurrency].value.toFixed(2),
-    });
-  }, [exchangeRate]);
-
-  useEffect(() => {
-    if (Object.keys(exchangeRate.course).length) changeToValue(toValue);
-
-    setCourse({
-      fromCur: fromCurrency,
-      toCur: exchangeRate.course[toCurrency].code,
-      toValue: exchangeRate.course[toCurrency].value.toFixed(2),
-    });
-  }, [toCurrency]);
+  const toggleCur = () => {
+    setToggle(true);
+    setFromCurrency(toCurrency);
+    setToCurrency(fromCurrency);
+  };
 
   const changeFromValue = (value) => {
     setFromValue(value);
-
     setToValue((value * exchangeRate.course[toCurrency].value).toFixed(2));
   };
 
   const changeToValue = async (value) => {
     setToValue(value);
-
     setFromValue((value / exchangeRate.course[toCurrency].value).toFixed(2));
   };
 
-  console.log(exchangeRate, '- exchangeRate');
-  console.log(fromCurrency, '- fromCurrency');
-  console.log(toCurrency, '- toCurrency');
-  console.log(fromValue, '- fromValue');
-  console.log(toValue, '- toValue');
+  useEffect(() => {
+    fetchCurrency(fromCurrency);
+  }, [fromCurrency]);
+
+  useEffect(() => {
+    if (Object.keys(exchangeRate.course).length) {
+      changeFromValue(fromValue);
+
+      setCourse({
+        fromCur: fromCurrency,
+        toCur: exchangeRate.course[toCurrency].code,
+        toValue: exchangeRate.course[toCurrency].value.toFixed(2),
+      });
+    }
+  }, [exchangeRate]);
+
+  useEffect(() => {
+    if (Object.keys(exchangeRate.course).length && !isToggle) {
+      changeToValue(toValue);
+
+      setCourse({
+        fromCur: fromCurrency,
+        toCur: exchangeRate.course[toCurrency].code,
+        toValue: exchangeRate.course[toCurrency].value.toFixed(2),
+      });
+    }
+
+    setToggle(false);
+  }, [toCurrency]);
 
   return (
     <>
       {exchangeRate.currency === '' ? (
-        <div>Loading...</div>
+        <div className='text-center'>Loading...</div>
       ) : (
         <div className='flex flex-col justify-center items-center gap-4 bg-white p-5 border border-[#E7E7EE] rounded-2xl shadow-lg'>
           <Currency
@@ -79,7 +84,9 @@ const Converter = ({ setCourse }) => {
           />
           <div className='text-center relative inline-block w-full'>
             <div className='absolute top-1/2 left-0 w-full bg-[#E7E7EE] h-[1px]'></div>
-            <button className='bg-[#26278D] rounded-full px-[15px] py-[12px] z-10'>
+            <button
+              onClick={toggleCur}
+              className='bg-[#26278D] rounded-full px-[15px] py-[12px] relative z-10'>
               <svg
                 width='16'
                 height='20'

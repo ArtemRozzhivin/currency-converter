@@ -17,11 +17,15 @@ function App() {
         <Converter setCourse={setCourse} />
       </div>
 
-      <div>
+      <div className=''>
         <p className='text-[#A1A1A1] mb-2'>Indicative Exchange Rate</p>
-        <p className='text-black font-medium text-lg'>
-          1 {course.fromCur} = {course.toValue} {course.toCur}
-        </p>
+        {!course.fromCur ? (
+          <div className='text-center'>Loading...</div>
+        ) : (
+          <p className='text-black font-medium text-lg'>
+            1 {course.fromCur} = {course.toValue} {course.toCur}
+          </p>
+        )}
       </div>
     </div>
   );
