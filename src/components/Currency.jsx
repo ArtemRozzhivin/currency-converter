@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Currency = ({ currency, setCurrency, value, setValue, exchangeRate, isConverted }) => {
-  const currencies = Object.keys(exchangeRate.course.data);
+  const currencies = Object.keys(exchangeRate.course);
 
   return (
     <div className='flex flex-col gap-4'>
@@ -22,7 +22,7 @@ const Currency = ({ currency, setCurrency, value, setValue, exchangeRate, isConv
 
         <input
           value={value}
-          setValue={setValue}
+          onChange={(e) => setValue(e.target.value)}
           type='number'
           className='bg-[#EFEFEF] rounded-lg px-4 py-2 font-semibold text-xl text-right block w-full'
         />

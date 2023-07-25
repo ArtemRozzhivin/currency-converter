@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const currenApi = process.env.REACT_APP_CURREN_API_KEY;
 
-const Converter = () => {
+const Converter = ({ setCourse }) => {
   const [exchangeRate, setExchangeRate] = useState({ currency: '', course: {} });
   const [fromCurrency, setFromCurrency] = useState('USD');
   const [toCurrency, setToCurrency] = useState('UAH');
@@ -18,8 +18,44 @@ const Converter = () => {
 
     setExchangeRate({
       currency,
-      course: response.data,
+      course: response.data.data,
     });
+  };
+
+  useEffect(() => {
+    fetchCurrency(fromCurrency);
+  }, [fromCurrency]);
+
+  useEffect(() => {
+    if (Object.keys(exchangeRate.course).length) changeFromValue(fromValue);
+
+    setCourse({
+      fromCur: fromCurrency,
+      toCur: exchangeRate.course[toCurrency].code,
+      toValue: exchangeRate.course[toCurrency].value.toFixed(2),
+    });
+  }, [exchangeRate]);
+
+  useEffect(() => {
+    if (Object.keys(exchangeRate.course).length) changeToValue(toValue);
+
+    setCourse({
+      fromCur: fromCurrency,
+      toCur: exchangeRate.course[toCurrency].code,
+      toValue: exchangeRate.course[toCurrency].value.toFixed(2),
+    });
+  }, [toCurrency]);
+
+  const changeFromValue = (value) => {
+    setFromValue(value);
+
+    setToValue((value * exchangeRate.course[toCurrency].value).toFixed(2));
+  };
+
+  const changeToValue = async (value) => {
+    setToValue(value);
+
+    setFromValue((value / exchangeRate.course[toCurrency].value).toFixed(2));
   };
 
   console.log(exchangeRate, '- exchangeRate');
@@ -27,10 +63,6 @@ const Converter = () => {
   console.log(toCurrency, '- toCurrency');
   console.log(fromValue, '- fromValue');
   console.log(toValue, '- toValue');
-
-  useEffect(() => {
-    fetchCurrency('USD');
-  }, []);
 
   return (
     <>
@@ -42,7 +74,7 @@ const Converter = () => {
             currency={fromCurrency}
             setCurrency={setFromCurrency}
             value={fromValue}
-            setValue={setFromValue}
+            setValue={changeFromValue}
             exchangeRate={exchangeRate}
           />
           <div className='text-center relative inline-block w-full'>
@@ -69,7 +101,7 @@ const Converter = () => {
             currency={toCurrency}
             setCurrency={setToCurrency}
             value={toValue}
-            setValue={setToValue}
+            setValue={changeToValue}
             exchangeRate={exchangeRate}
             isConverted
           />

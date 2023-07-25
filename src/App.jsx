@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import Converter from './components/Converter';
 
 function App() {
+  const [course, setCourse] = useState({ fromCur: '', toCur: '', toValue: '' });
+
   return (
     <div className='flex flex-col justify-center items-center h-screen w-screen bg-gradient-to-b from-[#EAEAFE] to-[#DDF6F300] py-[50px] px-[20px]'>
       <div className='flex flex-col justify-center items-center gap-3 mb-10'>
@@ -11,12 +14,14 @@ function App() {
       </div>
 
       <div className='mb-8'>
-        <Converter />
+        <Converter setCourse={setCourse} />
       </div>
 
       <div>
         <p className='text-[#A1A1A1] mb-2'>Indicative Exchange Rate</p>
-        <p className='text-black font-medium text-lg'>1 SGD = 0.7367 USD</p>
+        <p className='text-black font-medium text-lg'>
+          1 {course.fromCur} = {course.toValue} {course.toCur}
+        </p>
       </div>
     </div>
   );
