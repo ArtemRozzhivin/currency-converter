@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# Currency converter
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -18,7 +18,7 @@ The application is a simple currency exchanger. You can choose different currenc
 
 4. Rename the ".env.example" project file to ".env" and paste your API key into the appropriate field
 
-5.Run the "npm i" command
+5. Run the "npm i" command
 
 6. Run the application with the "npm run start" command
 
