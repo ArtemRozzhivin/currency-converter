@@ -12,6 +12,8 @@ const Converter = ({ setCourse }) => {
   const [toValue, setToValue] = useState(null);
   const [isToggle, setToggle] = useState(false);
 
+  const allowedCharactersRegex = /^[0-9.]*$/;
+
   const fetchCurrency = async (currency) => {
     const response = await axios.get(
       `https://api.currencyapi.com/v3/latest?base_currency=${currency}&apikey=${currenApi}`,
@@ -30,8 +32,10 @@ const Converter = ({ setCourse }) => {
   };
 
   const changeFromValue = (value) => {
-    setFromValue(value);
-    setToValue((value * exchangeRate.course[toCurrency].value).toFixed(2));
+    if (allowedCharactersRegex.test(value)) {
+      setFromValue(value);
+      setToValue((Number(value) * exchangeRate.course[toCurrency].value).toFixed(2));
+    }
   };
 
   const changeToValue = async (value) => {

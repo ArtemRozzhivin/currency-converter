@@ -23,7 +23,6 @@ const Currency = ({ currency, setCurrency, value, setValue, exchangeRate, isConv
         <input
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          type='number'
           className='bg-[#EFEFEF] rounded-lg px-4 py-2 font-semibold text-xl text-right block w-full'
         />
       </div>
